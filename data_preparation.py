@@ -68,7 +68,7 @@ def delete_outliers(X, y):
   num_outliers = 0
 
   for i, sample in enumerate(X):
-    if (not (np.array_equal(sample, X[shrek]) or np.array_equal(sample, X[trololo]))):
+    if (not (np.array_equal(sample, X[shrek]) and np.array_equal(sample, X[trololo]))):
       new_X.append(sample)
       new_y.append(y[i])
     else:
