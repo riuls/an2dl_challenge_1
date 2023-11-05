@@ -3,22 +3,13 @@ from tensorflow import keras as tfk
 from tensorflow.keras import layers as tfkl
 from tensorflow.keras.applications.mobilenet import preprocess_input
 
-def get_augmentation_layer():
-    return tf.keras.Sequential([
-            tfkl.RandomBrightness(0.2, value_range=(0,1)),
-            tfkl.RandomTranslation(0.2, 0.2),
-            tfkl.RandomZoom(0.2),
-            tfkl.RandomRotation(0.4),
-        ], name='preprocessing')
 
-def build_custom_model(input_shape, learning_rate, augmentation=True):
+def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.Sequential, name="CNN"):
 
     # Build the neural network layer by layer
     input_layer = tfkl.Input(shape=input_shape, name='Input')
-
-    if (augmentation):
-        preprocessing = get_augmentation_layer()
-        input_layer = preprocessing(input_layer)
+    
+    input_layer = augmentation_layer(input_layer)
 
     x = tfkl.Conv2D(filters=32, kernel_size=3, padding='same', name='conv0')(input_layer)
     x = tfkl.ReLU(name='relu0')(x)
@@ -44,7 +35,7 @@ def build_custom_model(input_shape, learning_rate, augmentation=True):
     output_layer = tfkl.Dense(units=2, activation='softmax',name='Output')(x)
 
     # Connect input and output through the Model class
-    model = tfk.Model(inputs=input_layer, outputs=output_layer, name='CNN')
+    model = tfk.Model(inputs=input_layer, outputs=output_layer, name=name)
 
     # Compile the model
     model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(learning_rate=learning_rate), metrics=['accuracy'])
