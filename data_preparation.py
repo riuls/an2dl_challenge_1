@@ -7,7 +7,7 @@ import numpy as np
 from random import randint
 from sklearn.preprocessing import LabelEncoder
 
-def load_data(folder="public_data.npz", resolution=112):
+def load_data(folder="public_data.npz", resolution=96):
     images = []
 
     loaded = np.load(folder, allow_pickle=True)

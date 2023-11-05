@@ -4,7 +4,7 @@ from tensorflow.keras import layers as tfkl
 from tensorflow.keras.applications.mobilenet import preprocess_input
 
 
-def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.Sequential, name="CNN"):
+def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.Sequential, name):
 
     # Build the neural network layer by layer
     input_layer = tfkl.Input(shape=input_shape, name='Input')

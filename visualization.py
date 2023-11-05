@@ -20,6 +20,6 @@ def plot_history(history, name):
 
     # Add bottom text
 
-    plt.text(0.5, -0.1, 'Best train accuracy: ' + str(np.max(history['accuracy'] + ',' +  'Best val accuracy: ' + str(np.max(history['val_accuracy']))), horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes))   
+    plt.text(0.5, -0.1, 'Best train accuracy: ' + str(np.max(history['accuracy'])) + ', Best val accuracy: ' + str(np.max(history['val_accuracy'])), horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
 
     plt.show()
