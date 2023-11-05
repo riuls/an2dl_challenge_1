@@ -43,7 +43,7 @@ def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.
     # Return the model
     return model
 
-def build_transfer_model(input_shape):
+def build_transfer_model(input_shape, name="Transfer Model"):
     mobile = tfk.applications.MobileNetV2(
         input_shape=input_shape,
         include_top=False,
@@ -63,7 +63,7 @@ def build_transfer_model(input_shape):
     outputs = tfkl.Dense(2, activation='softmax')(x)
 
     # Create a Model connecting input and output
-    tl_model = tfk.Model(inputs=inputs, outputs=outputs, name='model')
+    tl_model = tfk.Model(inputs=inputs, outputs=outputs, name=name)
 
     # Compile the model with Categorical Cross-Entropy loss and Adam optimizer
     tl_model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(), metrics=['accuracy'])
