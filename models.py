@@ -43,7 +43,7 @@ def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.
     # Return the model
     return model
 
-def build_transfer_model(input_shape, name="Transfer Model"):
+def build_transfer_model(input_shape, name="TransferModel"):
     mobile = tfk.applications.MobileNetV2(
         input_shape=input_shape,
         include_top=False,
