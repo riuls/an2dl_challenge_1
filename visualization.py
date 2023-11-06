@@ -14,6 +14,8 @@ def plot_history(history, name):
     plt.figure(figsize=(15,5))
     plt.plot(history['accuracy'], alpha=.3, color='#ff7f0e', linestyle='--')
     plt.plot(history['val_accuracy'], label='Re-trained', alpha=.8, color='#ff7f0e')
+    plt.plot(history['val_precision'], label='Re-trained', alpha=.8, color='#ff7f0e')
+    plt.plot(history['val_recall'], label='Re-trained', alpha=.8, color='#ff7f0e')
     plt.legend(loc='upper left')
     plt.title(name + ' Accuracy')
     plt.grid(alpha=.3)

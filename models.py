@@ -38,7 +38,7 @@ def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.
     model = tfk.Model(inputs=input_layer, outputs=output_layer, name=name)
 
     # Compile the model
-    model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(learning_rate=learning_rate), metrics=['accuracy'])
+    model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(learning_rate=learning_rate), metrics=['accuracy', 'recall', 'precision'])
 
     # Return the model
     return model
@@ -66,6 +66,6 @@ def build_transfer_model(input_shape, name="TransferModel"):
     tl_model = tfk.Model(inputs=inputs, outputs=outputs, name=name)
 
     # Compile the model with Categorical Cross-Entropy loss and Adam optimizer
-    tl_model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(), metrics=['accuracy'])
+    tl_model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(), metrics=['accuracy', 'recall', 'precision'])
 
     return tl_model
