@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras as tfk
 from tensorflow.keras import layers as tfkl
 from tensorflow.keras.applications.mobilenet import preprocess_input
+from tensorflow.keras.metrics import Precision, Recall
 
 
 def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.Sequential, name):
@@ -32,13 +33,13 @@ def build_custom_model(input_shape, learning_rate, augmentation_layer: tf.keras.
 
     x = tfkl.GlobalAveragePooling2D(name='gap')(x)
 
-    output_layer = tfkl.Dense(units=2, activation='softmax',name='Output')(x)
+    output_layer = tfkl.Dense(units=1, activation='sigmoid',name='Output')(x)
 
     # Connect input and output through the Model class
     model = tfk.Model(inputs=input_layer, outputs=output_layer, name=name)
 
     # Compile the model
-    model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(learning_rate=learning_rate), metrics=['accuracy', 'recall', 'precision'])
+    model.compile(loss=tfk.losses.BinaryCrossentropy(), optimizer=tfk.optimizers.Adam(learning_rate=learning_rate), metrics=['accuracy', Precision(name="precision"), Recall(name="recall")])
 
     # Return the model
     return model
@@ -59,13 +60,18 @@ def build_transfer_model(input_shape, name="TransferModel"):
 
     # Connect MobileNetV2 to the input
     x = mobile(inputs)
+
+    x = tfkl.Dense(256, activation="relu")
+    
+    x = tfkl.Dense(64, activation="relu")
+
     # Add a Dense layer with 2 units and softmax activation as the classifier
-    outputs = tfkl.Dense(2, activation='softmax')(x)
+    outputs = tfkl.Dense(1, activation='sigmoid')(x)
 
     # Create a Model connecting input and output
     tl_model = tfk.Model(inputs=inputs, outputs=outputs, name=name)
 
     # Compile the model with Categorical Cross-Entropy loss and Adam optimizer
-    tl_model.compile(loss=tfk.losses.CategoricalCrossentropy(), optimizer=tfk.optimizers.Adam(), metrics=['accuracy', 'recall', 'precision'])
+    tl_model.compile(loss=tfk.losses.BinaryCrossentropy(), optimizer=tfk.optimizers.Adam(), metrics=['accuracy', Precision(name="precision"), Recall(name="recall")])
 
     return tl_model

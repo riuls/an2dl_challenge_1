@@ -7,6 +7,7 @@ import numpy as np
 from random import randint
 from sklearn.preprocessing import LabelEncoder
 
+
 def load_data(folder="public_data.npz", resolution=96, head_only=False):
     images = []
 
@@ -41,7 +42,7 @@ def load_data(folder="public_data.npz", resolution=96, head_only=False):
        labels = labels[:10]
 
     y = LabelEncoder().fit_transform(labels)
-    y = tfk.utils.to_categorical(y, 2)
+    #y = tfk.utils.to_categorical(y, 1)
 
     return np.array(images), y
 
