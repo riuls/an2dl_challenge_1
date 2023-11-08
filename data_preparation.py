@@ -8,26 +8,32 @@ from random import randint
 from sklearn.preprocessing import LabelEncoder
 
 
-def load_data(folder="public_data.npz", resolution=96, head_only=False):
+def process_sample(img):
+    # Normalize image pixel values to a float range [0, 1]
+    img = (img / 255).astype(np.float32)
+
+    # Convert image from BGR to RGB
+    img = img[...,::-1]
+
+    # Make the image dataset squared
+    dim = min(img.shape[:-1])
+    img = img[(img.shape[0]-dim)//2:(img.shape[0]+dim)//2, (img.shape[1]-dim)//2:(img.shape[1]+dim)//2, :]
+
+    # Resize the image to 224x224 pixels
+    #img = tfkl.Resizing(224, 224)(img)
+    img = tfkl.Resizing(96, 96)(img)
+
+    return img
+
+def load_data(folder="public_data.npz", resolution=96, head_only=False, process=True):
     images = []
 
     loaded = np.load(folder, allow_pickle=True)
 
     # Iterate through files in the specified folder
     for i, img in enumerate(loaded['data']):
-        # Normalize image pixel values to a float range [0, 1]
-        img = (img / 255).astype(np.float32)
-
-        # Convert image from BGR to RGB
-        img = img[...,::-1]
-
-        # Make the image dataset squared
-        dim = min(img.shape[:-1])
-        img = img[(img.shape[0]-dim)//2:(img.shape[0]+dim)//2, (img.shape[1]-dim)//2:(img.shape[1]+dim)//2, :]
-
-        # Resize the image to 224x224 pixels
-        #img = tfkl.Resizing(224, 224)(img)
-        img = tfkl.Resizing(resolution, resolution)(img)
+        if (process):
+          img = process_sample(img)
 
         if img is not None:
             images.append(img)
