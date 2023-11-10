@@ -8,20 +8,20 @@ from random import randint
 from sklearn.preprocessing import LabelEncoder
 
 
-def process_sample(img):
+def process_sample(img, process=True):
     # Normalize image pixel values to a float range [0, 1]
     img = (img / 255).astype(np.float32)
 
-    # Convert image from BGR to RGB
-    img = img[...,::-1]
+    if (process):
+      # Convert image from BGR to RGB
+      img = img[...,::-1]
+      # Make the image dataset squared
+      dim = min(img.shape[:-1])
+      img = img[(img.shape[0]-dim)//2:(img.shape[0]+dim)//2, (img.shape[1]-dim)//2:(img.shape[1]+dim)//2, :]
 
-    # Make the image dataset squared
-    dim = min(img.shape[:-1])
-    img = img[(img.shape[0]-dim)//2:(img.shape[0]+dim)//2, (img.shape[1]-dim)//2:(img.shape[1]+dim)//2, :]
-
-    # Resize the image to 224x224 pixels
-    #img = tfkl.Resizing(224, 224)(img)
-    img = tfkl.Resizing(96, 96)(img)
+      # Resize the image to 224x224 pixels
+      #img = tfkl.Resizing(224, 224)(img)
+      #img = tfkl.Resizing(96, 96)(img)
 
     return img
 
@@ -32,8 +32,7 @@ def load_data(folder="public_data.npz", resolution=96, head_only=False, process=
 
     # Iterate through files in the specified folder
     for i, img in enumerate(loaded['data']):
-        if (process):
-          img = process_sample(img)
+        img = process_sample(img, process=process)
 
         if img is not None:
             images.append(img)

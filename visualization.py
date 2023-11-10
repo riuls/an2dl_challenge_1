@@ -11,6 +11,7 @@ def plot_history(history, name):
     plt.title('Categorical Crossentropy')
     plt.grid(alpha=.3)
     """
+    
     plt.figure(figsize=(15,5))
     plt.plot(history['accuracy'], alpha=.3, color='#ff7f0e', linestyle='--')
     plt.plot(history['val_accuracy'], label='Val Accuracy', alpha=.8, color='#ff7f0e')
