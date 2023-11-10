@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_history(history, name):
+def plot_history(history, name, plot_val=True):
     # Plot the re-trained MobileNetV2 training history
     """
     plt.figure(figsize=(15,5))
@@ -14,9 +14,10 @@ def plot_history(history, name):
     
     plt.figure(figsize=(15,5))
     plt.plot(history['accuracy'], alpha=.3, color='#ff7f0e', linestyle='--')
-    plt.plot(history['val_accuracy'], label='Val Accuracy', alpha=.8, color='#ff7f0e')
-    plt.plot(history['val_precision'], label='Val Precision', alpha=.8, color='red')
-    plt.plot(history['val_recall'], label='Val Recall', alpha=.8, color='blue')
+    if (plot_val):
+        plt.plot(history['val_accuracy'], label='Val Accuracy', alpha=.8, color='#ff7f0e')
+        plt.plot(history['val_precision'], label='Val Precision', alpha=.8, color='red')
+        plt.plot(history['val_recall'], label='Val Recall', alpha=.8, color='blue')
     plt.legend(loc='upper left')
     plt.title(name + ' Accuracy')
     plt.grid(alpha=.3)
