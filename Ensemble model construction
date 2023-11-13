@@ -1,0 +1,36 @@
+# the ensemble of models
+model_1 = tfk.models.load_model('efficientnet_ft')
+model_2 = tfk.models.load_model('mobilenetv2_and_autoencoder1_2')
+model_3 = tfk.models.load_model('xception_and_encoder')
+model_4 = tfk.models.load_model('efficientnetv2_autoencoder')
+model_5 = tfk.models.load_model('efficientnetv2_augmentation_ft')
+
+# Renaming (using different names is required, in my case I had saved them all with the name 'model')
+model_2._name = model_2.name + str('_2')
+model_3._name = model_3.name + str('_3')
+model_4._name = model_4.name + str('_4')
+model_5._name = model_5.name + str('_5')
+
+
+# Construction of the model
+
+# single input layer connected to each model
+input_layer = tfkl.Input(shape = (96,96,3), name = 'input_layer')
+
+# efficientnet has incorporated preprocessing, same for branch 4 and 5
+branch_1 = model_1(input_layer)
+
+# here preprocessing is needed: use a lambda layer where to store the specific function
+branch_2_preprocess = tf.keras.layers.Lambda(tfk.applications.mobilenet.preprocess_input)(input_layer)
+branch_2 = model_2(branch_2_preprocess)
+
+branch_3_preprocess = tf.keras.layers.Lambda(tfk.applications.xception.preprocess_input)(input_layer)
+branch_3 = model_3(branch_3_preprocess)
+
+branch_4 = model_4(input_layer)
+
+branch_5 = model_5(input_layer)
+
+add = tfkl.Add()([branch_1, branch_2, branch_3, branch_4, branch_5])    # adding the 5 outcomes
+divide = tfkl.Lambda(lambda x: x/5)(add)    # another lambda layer to normalize the probabilities (divide by N)
+final_model = tfk.Model(inputs=input_layer, outputs = divide)
