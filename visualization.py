@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_history(history, name, plot_val=True):
+def plot_history(history, name, plot_val=True, patience=20):
     # Plot the re-trained MobileNetV2 training history
     """
     plt.figure(figsize=(15,5))
@@ -24,6 +24,6 @@ def plot_history(history, name, plot_val=True):
 
     # Add bottom text
 
-    plt.text(0.5, -0.1, 'Best train accuracy: ' + str(round(np.max(history['accuracy']), 4)) + ', Best val accuracy: ' + str(round(np.max(history['val_accuracy']), 4)), horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+    plt.text(0.5, -0.1, 'Train accuracy: ' + str(round(history['accuracy'][-patience-1], 4)) + ', Val accuracy: ' + str(round(np.max(history['val_accuracy']), 4)), horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
 
     plt.show()
