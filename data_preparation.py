@@ -8,7 +8,7 @@ from random import randint
 from sklearn.preprocessing import LabelEncoder
 
 
-def process_sample(img, process=True):
+def process_sample(img, process=True, resizing=None):
     # Normalize image pixel values to a float range [0, 1]
     img = (img / 255).astype(np.float32)
 
@@ -19,20 +19,21 @@ def process_sample(img, process=True):
       dim = min(img.shape[:-1])
       img = img[(img.shape[0]-dim)//2:(img.shape[0]+dim)//2, (img.shape[1]-dim)//2:(img.shape[1]+dim)//2, :]
 
+      if (resizing != None):
       # Resize the image to 224x224 pixels
-      #img = tfkl.Resizing(224, 224)(img)
+        img = tfkl.Resizing(resizing, resizing)(img)
       #img = tfkl.Resizing(96, 96)(img)
 
     return img
 
-def load_data(folder="public_data.npz", resolution=96, head_only=False, process=True):
+def load_data(folder="public_data.npz", resizing=None, head_only=False, process=True):
     images = []
 
     loaded = np.load(folder, allow_pickle=True)
 
     # Iterate through files in the specified folder
     for i, img in enumerate(loaded['data']):
-        img = process_sample(img, process=process)
+        img = process_sample(img, process=process, resizing=resizing)
 
         if img is not None:
             images.append(img)
